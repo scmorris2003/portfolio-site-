@@ -1,0 +1,82 @@
+# Python-specific
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyc
+*.pyo
+
+# Environments & virtualenvs
+.env
+.venv/
+venv/
+ENV/
+env/
+*.env.bak
+customer_sentiment-env/   # Your specific conda env name
+
+# Distribution & packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Logs & temp
+*.log
+*.tmp
+tmp/
+
+# Hugging Face / Transformers / PyTorch caches & large files
+~/.cache/huggingface/
+.cache/huggingface/
+hf_cache/
+*.bin          # Model weights (pytorch_model.bin etc.)
+*.safetensors
+*.pt
+*.pth
+results/       # Your Trainer output_dir
+checkpoints/
+fine_tuned_distilbert_sentiment/   # Your local saved model folder
+*.ckpt
+
+# Datasets (large CSVs, Parquet, Arrow files)
+*.csv          # Unless it's a tiny sample – add !sample_reviews.csv to force-include if needed
+*.parquet
+*.arrow
+*.jsonl
+data/          # Or whatever folder holds raw data
+
+# IDE / Editor files
+.idea/         # PyCharm
+.vscode/
+*.swp
+*.swo
+
+# OS-specific
+.DS_Store      # macOS
+Thumbs.db      # Windows
+ehthumbs.db
+
+# Misc ML files
+wandb/         # If you ever add Weights & Biases
+tensorboard/
+runs/
+lightning_logs/
