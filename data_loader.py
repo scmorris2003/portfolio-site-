@@ -1,3 +1,5 @@
+#Pulls the dataset and saves a sample for fine tuning
+
 from datasets import load_dataset
 import pandas as pd
 

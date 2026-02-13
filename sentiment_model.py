@@ -1,3 +1,6 @@
+#Fine distilbert model from amazon reviews.
+#Reviews converted to postive/negative label
+
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
 from datasets import Dataset
 import pandas as pd
@@ -14,14 +17,14 @@ df['label'] = (df['label'] >= 3).astype(int)   # 3-4 = positive (1)
 # Split
 train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
 
-# To Dataset (ensure columns are 'text' and 'label')
+# To Dataset
 train_dataset = Dataset.from_pandas(train_df[['text', 'label']])
 test_dataset = Dataset.from_pandas(test_df[['text', 'label']])
 
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
 def tokenize_function(examples):
-    return tokenizer(examples['text'], padding="max_length", truncation=True, max_length=128)  # Add max_length to avoid OOM
+    return tokenizer(examples['text'], padding="max_length", truncation=True, max_length=128)  #max_length avoids OOM, running on 3070ti
 
 train_dataset = train_dataset.map(tokenize_function, batched=True)
 test_dataset = test_dataset.map(tokenize_function, batched=True)
@@ -32,6 +35,7 @@ test_dataset.set_format("torch", columns=["input_ids", "attention_mask", "label"
 
 model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=2)
 
+#For important use we should run over grid of hyperparameters to pick best but for toy model this is fine
 training_args = TrainingArguments(
     output_dir="./results",
     num_train_epochs=3,
@@ -61,10 +65,10 @@ trainer = Trainer(
     compute_metrics=compute_metrics
 )
 
-trainer.train()
+trainer.train() #and let her rip.
 
 
-# After trainer.train() finishes
+#Look at results. These are what we would save if doing grid search over hyperparameters
 eval_results = trainer.evaluate()
 print("Final evaluation results:", eval_results)
 
@@ -79,6 +83,7 @@ print("Confusion Matrix:\n", confusion_matrix(labels, preds))
 print("\nClassification Report:\n", classification_report(labels, preds, target_names=["Negative", "Positive"]))
 
 
+#check out some where the model got it wrong
 wrong_idx = np.where(preds != labels)[0][:5]  # First 5 errors
 for idx in wrong_idx:
     print(f"Text: {test_df.iloc[idx]['text']}")
@@ -89,7 +94,7 @@ trainer.save_model("./fine_tuned_distilbert_sentiment")  #
 tokenizer.save_pretrained("./fine_tuned_distilbert_sentiment")
 
 
-#load the model and push to hugging face
+#load the model and push to hugging face for demo
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 # 1. Load the saved model and tokenizer from your local folder
