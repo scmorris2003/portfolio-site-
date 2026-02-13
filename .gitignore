@@ -60,7 +60,6 @@ fine_tuned_distilbert_sentiment/   # Your local saved model folder
 # Datasets (large CSVs, Parquet, Arrow files)
 *.csv          # Unless it's a tiny sample – add !sample_reviews.csv to force-include if needed
 *.parquet
-*.arrow
 *.jsonl
 data/          # Or whatever folder holds raw data
 
